@@ -25,8 +25,8 @@ class ScooterApp {
   }
 
   loginUser(username, password) {
-    const user = this.registeredUsers[username];
-    if(user && user.login(password)) {
+    if (this.registeredUsers[username]) {
+      this.registeredUsers[username].login(password);
       console.log("user has been logged in");
     } else {
       throw new Error('username or password is incorrect');
@@ -89,5 +89,6 @@ class ScooterApp {
     }
   }
 }
+
 
 module.exports = ScooterApp
