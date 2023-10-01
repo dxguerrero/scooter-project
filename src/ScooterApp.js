@@ -45,7 +45,7 @@ class ScooterApp {
 
   createScooter(station) {
     if(!this.stations[station]) {
-      throw new Error("no such station error");
+      throw new Error("no such station");
     }
 
     const scooter = new Scooter(station);
@@ -69,18 +69,19 @@ class ScooterApp {
   }
 
   rentScooter(scooter, user) {
-    if (this.stations[station].includes(scooter)) {
+    if(this.stations[scooter.station] === undefined) {
+      throw new Error("scooter already rented");
+    } else if (this.stations[scooter.station].includes(scooter)) {
       this.stations[scooter.station].splice(this.stations[scooter.station].indexOf(scooter), 1);
+      scooter.rent(user);
       console.log("scooter is rented");
-    } else {
-      throw new Error("scooter already rented")
     }
   }
 
   print() {
     console.log("Registered Users: ");
     for (const [username, user] of Object.entries(this.registeredUsers)) {
-      console.log(`${username} (${age})`);
+      console.log(`${username} (${user.age})`);
     }
 
     console.log("Stations: ");

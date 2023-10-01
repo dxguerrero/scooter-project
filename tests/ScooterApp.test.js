@@ -11,6 +11,18 @@ describe("registerUser method tests", () => {
     let response = scooterApp.registerUser("Joe Bloggs", "test123", 21);
     expect(response).toBeInstanceOf(User);
   });
+
+  test("throws error if age under 20", () => {
+    expect(() => {
+      scooterApp.registerUser("Mark", "test123", 15)
+    }).toThrow("Too young to register");
+  })
+
+  test("throws error if already registered", () => {
+    expect(() => {
+      scooterApp.registerUser("Joe Bloggs", "test123", 21)
+    }).toThrow("Already registered");
+  })
 });
 
 
@@ -52,6 +64,58 @@ describe("logoutUser method tests", () => {
   })
 })
 
-// rent scooter
+// create scooter
+describe("createScooter method tests", () => {
+  const scooter = scooterApp.createScooter("Station 1");
+  test("adds scooter to station", () => {
+    expect(scooterApp.stations["Station 1"]).toEqual([scooter]);
+  })
 
-// dock scooter
+  test("throws error when station does not exist", () => {
+    expect(() => {
+      scooterApp.createScooter("Station 4")
+    }).toThrow("no such station")
+  })
+})
+
+// rent scooter
+describe("rentScooter method tests", () => {
+  const scooter1 = scooterApp.createScooter("Station 1");
+  const user1 = scooterApp.registerUser("Bob", "test123", 50);
+  scooterApp.rentScooter(scooter1, user1);
+
+  test("rents scooter to user", () => {
+    expect(scooter1.user).toBe(user1);
+  })
+
+  test("throws error if scooter is already rented", () => {
+    const user2 = scooterApp.registerUser("John", "test123", 25);
+    expect(() => {
+      scooterApp.rentScooter(scooter1, user2);
+    }).toThrow("scooter already rented");
+  })
+})
+
+//  dock scooter
+describe("dockScooter method tests", () => {
+  const scooter2 = scooterApp.createScooter("Station 1");
+  const user1 = scooterApp.registerUser("Jeff", "test123", 50);
+  scooterApp.rentScooter(scooter2, user1);
+  
+  test("scooter is added to station", () => {
+    scooterApp.dockScooter(scooter2, "Station 1");
+    expect(scooter2.station).toBe("Station 1");
+  })
+
+  test("throws error if station does not exist", () => {
+    expect(() => {
+      scooterApp.dockScooter(scooter2, "Station 5")
+    }).toThrow("no such station");
+  })
+
+  test("throws error if scooter already at station", () => {
+    expect(() => {
+      scooterApp.dockScooter(scooter2, "Station 1")
+    }).toThrow("scooter already at station");
+  })
+})
