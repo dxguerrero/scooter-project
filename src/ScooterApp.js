@@ -69,7 +69,7 @@ class ScooterApp {
   }
 
   rentScooter(scooter, user) {
-    if(this.stations[scooter.station] === undefined) {
+    if(this.stations[scooter.station] == null) {
       throw new Error("scooter already rented");
     } else if (this.stations[scooter.station].includes(scooter)) {
       this.stations[scooter.station].splice(this.stations[scooter.station].indexOf(scooter), 1);
